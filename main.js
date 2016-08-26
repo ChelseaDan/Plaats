@@ -22,6 +22,7 @@ app.get('/api/meetups', meetupsController.list);
 app.delete('/api/meetups/:name', meetupsController.remove);
 
 app.use('/scripts', express.static(__dirname + '/client/scripts'));
+app.use('/css', express.static(__dirname + '/client/css'));
 
 app.listen(3000, function() {
     console.log('I\'m Listening...');
