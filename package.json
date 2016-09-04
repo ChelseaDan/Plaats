@@ -3,9 +3,16 @@
   "version": "0.0.1",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "event-stream": "^3.3.4",
     "express": "^4.14.0",
     "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-concat": "^2.6.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-typescript": "^2.13.6",
     "gulp-uglify": "^2.0.0",
-    "mongoose": "^4.5.9"
+    "mongoose": "^4.5.9",
+    "typescript": "^1.8.10",
+    "ui-router": "^1.0.0-alpha.3"
   }
 }
