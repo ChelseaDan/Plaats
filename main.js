@@ -4,7 +4,9 @@ var bodyParser = require('body-parser');
 var app = express();
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/mean-demo');
+//mongoose.connect('mongodb://localhost:27017/mean-demo');
+mongoose.connect('mongodb://heroku_p81txdqj:daniel95@ds019996.mlab.com:19996/heroku_p81txdqj');
+
 
 meetupsController = require('./server/controllers/meetupsController');
 accountsController = require('./server/controllers/accountsController');
