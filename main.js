@@ -52,6 +52,6 @@ app.use('/dist', express.static(__dirname + '/dist/scripts'));
 app.use('/libs', express.static(__dirname + '/libs'));
 app.use('/fonts', express.static(__dirname + '/client/fonts'));
 
-app.listen(3000, function() {
+app.listen(process.env.PORT || 3000, function() {
     console.log('I\'m Listening...');
 })
