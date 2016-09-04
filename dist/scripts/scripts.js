@@ -53,7 +53,6 @@ var App;
             this.signedIn = false;
             this.logInSelected = false;
             this.signInSelected = true;
-            console.log("Creating the testController");
         }
         LoginController.prototype.submitNewUserDetails = function () {
             this.signedIn = true;
@@ -63,9 +62,7 @@ var App;
                 emailAddress: this.emailAddress,
                 password: this.password
             };
-            console.log(newUser);
             this.$http.post('/api/accounts/', newUser, { withCredentials: true }).then(function (response) {
-                console.log(response);
             });
         };
         LoginController.prototype.submitLogInDetails = function () {
