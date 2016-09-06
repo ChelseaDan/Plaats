@@ -21,9 +21,9 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         url: "/properties",
         templateUrl: "/properties"
     })
-        .state("about", {
+        .state("upload", {
         url: "/about",
-        templateUrl: "/login"
+        templateUrl: "/home"
     });
 });
 
