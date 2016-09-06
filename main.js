@@ -34,8 +34,8 @@ app.get('/properties', function(req, res){
   res.sendFile(__dirname + '/client/scripts/controllers/home/home.html');
 });
 
-app.get('/.well-known/acme-challenge/RYldyWMdOJ7mcCVSPmLuGK7j5c6U7QjZNxfm6uWU7Ac', function(req, res) {
-    res.sendFile(__dirname + '/well-known/acme-challenge/RYldyWMdOJ7mcCVSPmLuGK7j5c6U7QjZNxfm6uWU7Ac');
+app.get('/.well-known/acme-challenge/j-mTA9V68YsKIVr7fWpVfh6e8CEXe2smOhxWl4jD9Zg', function(req, res) {
+    res.sendFile(__dirname + '/well-known/acme-challenge/j-mTA9V68YsKIVr7fWpVfh6e8CEXe2smOhxWl4jD9Zg');
 })
 
 // Controller method routes.
