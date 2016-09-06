@@ -34,6 +34,10 @@ app.get('/properties', function(req, res){
   res.sendFile(__dirname + '/client/scripts/controllers/home/home.html');
 });
 
+app.get('/.well-known/acme-challenge/RYldyWMdOJ7mcCVSPmLuGK7j5c6U7QjZNxfm6uWU7Ac', function(req, res) {
+    res.sendFile(__dirname + '/well-known/acme-challenge/RYldyWMdOJ7mcCVSPmLuGK7j5c6U7QjZNxfm6uWU7Ac');
+})
+
 // Controller method routes.
 
 app.post('/api/meetups', meetupsController.create);
