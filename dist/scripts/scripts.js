@@ -62,12 +62,20 @@ var App;
                 emailAddress: this.emailAddress,
                 password: this.password
             };
-            this.$http.post('/api/accounts/', newUser, { withCredentials: true }).then(function (response) {
+            this.$http.post('/api/accounts/register', newUser, { withCredentials: true }).then(function (response) {
+                console.log(response);
             });
         };
         LoginController.prototype.submitLogInDetails = function () {
             this.displaySpinner = true;
-            console.log("submitting log in details");
+            this.signedIn = true;
+            var existingUser = {
+                emailAddress: this.emailAddress,
+                password: this.password
+            };
+            this.$http.post('/api/accounts/login', existingUser, { withCredentials: true }).then(function (response) {
+                console.log(response);
+            });
         };
         LoginController.prototype.signIn = function () {
             this.signInSelected = true;

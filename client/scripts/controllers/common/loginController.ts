@@ -41,15 +41,22 @@ module App {
                 emailAddress: this.emailAddress,
                 password: this.password
             }
-            this.$http.post('/api/accounts/', newUser, {withCredentials: true}).then(response => {
-                
+            this.$http.post('/api/accounts/register', newUser, {withCredentials: true}).then(response => {
+                console.log(response);
             });
 
         }
 
         public submitLogInDetails() {
             this.displaySpinner = true;
-            console.log("submitting log in details");
+            this.signedIn = true;
+            var existingUser = {
+                emailAddress: this.emailAddress,
+                password: this.password
+            }
+            this.$http.post('/api/accounts/login', existingUser, {withCredentials: true}).then(response => {
+                console.log(response);
+            });
         }
 
         private signIn() {

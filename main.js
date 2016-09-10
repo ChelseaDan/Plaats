@@ -11,6 +11,7 @@ mongoose.connect('mongodb://plaatsdb:plaats123@ds019996.mlab.com:19996/heroku_p8
 meetupsController = require('./server/controllers/meetupsController');
 accountsController = require('./server/controllers/accountsController');
 
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -21,7 +22,6 @@ app.get('/', function(req, res){
 });
 
 app.get('/home', function(req, res){
-    console.log("Hello");
     res.sendFile(__dirname + '/client/scripts/controllers/common/banner.html');
 });
 
@@ -30,19 +30,16 @@ app.get('/login', function(req, res){
 });
 
 app.get('/properties', function(req, res){
-    console.log("Here");
   res.sendFile(__dirname + '/client/scripts/controllers/home/home.html');
 });
-
-app.get('/.well-known/acme-challenge/j-mTA9V68YsKIVr7fWpVfh6e8CEXe2smOhxWl4jD9Zg', function(req, res) {
-    res.sendFile(__dirname + '/well-known/acme-challenge/j-mTA9V68YsKIVr7fWpVfh6e8CEXe2smOhxWl4jD9Zg');
-})
 
 // Controller method routes.
 
 app.post('/api/meetups', meetupsController.create);
 
-app.post('/api/accounts/', accountsController.create);
+app.post('/api/accounts/register', accountsController.create);
+
+app.post('/api/accounts/login', accountsController.checkUser);
 
 app.get('/api/meetups', meetupsController.list);
 
