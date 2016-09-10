@@ -1,21 +1,23 @@
+// app/models/user.js
+// load the things we need
 var mongoose = require('mongoose');
-var crypto = require('crypto');
 
-module.exports = mongoose.model('User', {
-  email: {
-    type: String,
-    unique: true,
-    required: true
-  },
-  firstName: {
-    type: String,
-    required: true
-  },
-  lastName: {
-    type: String,
-    required: true
-  },
-  hash: String,
-  salt: String
+// define the schema for our user model
+var userSchema = mongoose.Schema({
+
+    local            : {
+        firstname    : String,
+        lastname     : String, 
+        email        : String,
+        password     : String
+    },
+    facebook         : {
+        id           : String,
+        token        : String,
+        email        : String,
+        name         : String
+    }
 });
 
+// create the model for users and expose it to our app
+module.exports = mongoose.model('User', userSchema);

@@ -1,4 +1,5 @@
 ///<reference path="../../../../typings/angular.d.ts" />
+///<reference path="loginService.ts" />
 ///<reference path="_common.ts" />
 var App;
 (function (App) {
@@ -14,15 +15,18 @@ var App;
     }
     App.LoginDirective = LoginDirective;
     var LoginController = (function () {
-        function LoginController($scope, $http) {
+        function LoginController($scope, $http, spinnerService, loginService) {
             this.$scope = $scope;
             this.$http = $http;
-            this.signedIn = false;
+            this.spinnerService = spinnerService;
+            this.loginService = loginService;
             this.logInSelected = false;
             this.signInSelected = true;
+            this.displaySpinner = false;
         }
         LoginController.prototype.submitNewUserDetails = function () {
-            this.signedIn = true;
+            var _this = this;
+            this.displaySpinner = true;
             var newUser = {
                 firstName: this.firstName,
                 lastName: this.lastName,
@@ -30,33 +34,37 @@ var App;
                 password: this.password
             };
             this.$http.post('/api/accounts/register', newUser, { withCredentials: true }).then(function (response) {
-                console.log(response);
+                _this.displaySpinner = false;
+                _this.loginService.setSignedIn();
+            }, function (err) {
+                _this.displaySpinner = false;
             });
         };
         LoginController.prototype.submitLogInDetails = function () {
+            var _this = this;
             this.displaySpinner = true;
-            this.signedIn = true;
             var existingUser = {
                 emailAddress: this.emailAddress,
                 password: this.password
             };
             this.$http.post('/api/accounts/login', existingUser, { withCredentials: true }).then(function (response) {
-                console.log(response);
+                _this.displaySpinner = false;
+                _this.loginService.setSignedIn();
+            }, function (err) {
             });
+        };
+        LoginController.prototype.signedIn = function () {
+            return this.loginService.getSignedIn();
         };
         LoginController.prototype.signIn = function () {
             this.signInSelected = true;
             this.logInSelected = false;
-            console.log("Sign in selected: " + this.signInSelected);
-            console.log("log in selected: " + this.logInSelected);
         };
         LoginController.prototype.logIn = function () {
             this.logInSelected = true;
             this.signInSelected = false;
-            console.log("Sign in selected: " + this.signInSelected);
-            console.log("log in selected: " + this.logInSelected);
         };
-        LoginController.$inject = ['$scope', '$http'];
+        LoginController.$inject = ['$scope', '$http', 'spinnerService'];
         return LoginController;
     }());
     App.LoginController = LoginController;

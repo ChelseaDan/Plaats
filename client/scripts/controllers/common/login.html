@@ -1,12 +1,14 @@
-
-<div class="form" ng-show="!vm.signedIn">
+<div class="form" ng-show="!vm.signedIn()">
       <ul class="tab-group">
-        <li class="tab active"><a ng-click="vm.signIn()">Sign In</a></li>
-        <li class="tab"><a ng-click="vm.logIn()">Log In</a></li>
+        <li class="tab"><a ng-click="vm.signIn()">Sign up</a></li>
+        <li class="tab active"><a ng-click="vm.logIn()">Log in</a></li>
       </ul>
-      <div>
-        <div ng-show="vm.signInSelected">   
-          <h1>Sign Up for Free!</h1>
+        <div ng-show="vm.signInSelected">
+          <div class="mask-loading" ng-show="vm.displaySpinner"></div>
+          <h4>Continue with:</h4>
+          <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+          <hr>   
+          <h4>Sign Up for Free!</h4>
           <form ng-submit = "vm.submitNewUserDetails()">
           <div class="top-row">
             <div class="field-wrap">
@@ -26,7 +28,10 @@
           </form>
         </div>
         <div ng-show="vm.logInSelected">
-          <h1>Welcome Back!</h1>
+          <h4>Continue with:</h4>
+          <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+          <hr>
+          <h4>Log in:</h4>
           <form ng-submit="vm.submitLogInDetails()">
             <div class="field-wrap">
             <input type="email" class="form-control" required autocomplete="off" placeholder="Email" ng-model="vm.emailAddress"/>
@@ -38,5 +43,4 @@
           <button class="button button-block">Log In</button>
           </form>
         </div>
-      </div>
 </div>

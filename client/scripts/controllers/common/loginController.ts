@@ -1,4 +1,5 @@
 ///<reference path="../../../../typings/angular.d.ts" />
+///<reference path="loginService.ts" />
 ///<reference path="_common.ts" />
 module App {
     export function LoginDirective(): ng.IDirective {
@@ -14,11 +15,9 @@ module App {
 
     export class LoginController {
 
-        static $inject = ['$scope', '$http'];
+        static $inject = ['$scope', '$http', 'spinnerService'];
 
         //Presentation logic.
-        public displaySpinner: boolean;
-        public signedIn: boolean;
         public signInSelected: boolean;
         public logInSelected: boolean;
         //User details.
@@ -26,15 +25,20 @@ module App {
         public lastName: String;
         public emailAddress: String;
         public password: String;
+        public displaySpinner: boolean;
 
-        public constructor(private $scope: ng.IScope, private $http: ng.IHttpService){
-            this.signedIn = false;
+        public constructor(
+        private $scope: ng.IScope, 
+        private $http: ng.IHttpService, 
+        private spinnerService: any,
+        private loginService: LoginService){
             this.logInSelected = false;
             this.signInSelected = true;
+            this.displaySpinner = false;
         }
 
         public submitNewUserDetails() {
-            this.signedIn = true;
+            this.displaySpinner = true;
             var newUser = {
                 firstName: this.firstName,
                 lastName: this.lastName, 
@@ -42,35 +46,40 @@ module App {
                 password: this.password
             }
             this.$http.post('/api/accounts/register', newUser, {withCredentials: true}).then(response => {
-                console.log(response);
+                this.displaySpinner = false;
+                this.loginService.setSignedIn();
+            }, err => {
+                this.displaySpinner = false;
             });
 
         }
 
         public submitLogInDetails() {
             this.displaySpinner = true;
-            this.signedIn = true;
             var existingUser = {
                 emailAddress: this.emailAddress,
                 password: this.password
             }
             this.$http.post('/api/accounts/login', existingUser, {withCredentials: true}).then(response => {
-                console.log(response);
+                this.displaySpinner = false;
+                this.loginService.setSignedIn();
+            }, err => {
+
             });
+        }
+
+        private signedIn() {
+            return this.loginService.getSignedIn();
         }
 
         private signIn() {
             this.signInSelected = true;
             this.logInSelected = false;
-            console.log("Sign in selected: " + this.signInSelected);
-            console.log("log in selected: " + this.logInSelected);
         }
 
         private logIn() {
             this.logInSelected = true;
             this.signInSelected = false;
-            console.log("Sign in selected: " + this.signInSelected);
-            console.log("log in selected: " + this.logInSelected);
         }
     }
 }

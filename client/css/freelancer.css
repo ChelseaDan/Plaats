@@ -18,7 +18,7 @@ a:hover,
 a:focus,
 a:active,
 a.active {
-  color: #18BC9C;
+  color: lightslategrey;
   outline: none;
 }
 h1,
@@ -30,7 +30,7 @@ h6 {
   font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-transform: uppercase;
   font-weight: 700;
-  color: white;
+  color: lightslategray;
 }
 hr.star-light,
 hr.star-primary {
@@ -70,7 +70,7 @@ hr.star-primary:after {
 }
 header {
   text-align: center;
-  background: #18BC9C;
+  background:lightgray;
   color: white;
 }
 header .container {
@@ -130,7 +130,7 @@ header .intro-text .skills {
   color: white;
 }
 .navbar-custom .navbar-nav li a:hover {
-  color: #18BC9C;
+  color:lightslategray;
   outline: none;
 }
 .navbar-custom .navbar-nav li a:focus,
@@ -145,7 +145,7 @@ header .intro-text .skills {
 .navbar-custom .navbar-nav li.active a:focus,
 .navbar-custom .navbar-nav li.active a:active {
   color: white;
-  background: #18BC9C;
+  background: lightslategray;
 }
 .navbar-custom .navbar-toggle {
   color: white;
@@ -330,8 +330,8 @@ footer .footer-below {
 }
 .btn-primary {
   color: white;
-  background-color: #2C3E50;
-  border-color: #2C3E50;
+  background-color: #4A6BB2;
+  border-color: #4A6BB2;
   font-weight: 700;
 }
 .btn-primary:hover,
@@ -340,8 +340,8 @@ footer .footer-below {
 .btn-primary.active,
 .open .dropdown-toggle.btn-primary {
   color: white;
-  background-color: #1a242f;
-  border-color: #161f29;
+  background-color: #4A6BB2;
+  border-color: #4A6BB2;
 }
 .btn-primary:active,
 .btn-primary.active,

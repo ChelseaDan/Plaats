@@ -2,7 +2,8 @@
 var app = angular.module('App', [
     'ui.router',
     'App.common',
-    'App.home'
+    'App.home',
+    'angularSpinners'
 ]);
 app.config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/home');

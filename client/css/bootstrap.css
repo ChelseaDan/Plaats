@@ -359,7 +359,7 @@ th {
 }
 .glyphicon-home:before {
   content: "\e021";
-  font-size: 36px; 
+  font-size: 24px; 
 }
 .glyphicon-file:before {
   content: "\e022";
@@ -2559,8 +2559,8 @@ output {
   padding: 6px 12px;
   font-size: 14px;
   line-height: 1.42857143;
-  color: white;
-  background-color: #2C3E50;
+  color: black;
+  background-color: lightgray;
   background-image: none;
   border: 1px solid #ccc;
   border-radius: 4px;
