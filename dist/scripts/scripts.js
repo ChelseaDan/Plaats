@@ -10,23 +10,31 @@ app.config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
         .state('home', {
         url: '/home',
-        templateUrl: '/home'
+        templateUrl: '/home',
+        controller: "homeController",
+        controllerAs: "vm"
+    })
+        .state('properties', {
+        url: '/properties',
+        templateUrl: '/home',
+        controller: "homeController",
+        controllerAs: "vm"
+    })
+        .state('account', {
+        url: '/account',
+        templateUrl: '/account',
+        controller: "accountController",
+        controllerAs: "vm"
     })
         .state("login", {
         url: "/login",
         templateUrl: "/login",
         controller: "loginController",
         controllerAs: "vm"
-    })
-        .state("properties", {
-        url: "/properties",
-        templateUrl: "/properties"
-    })
-        .state("upload", {
-        url: "/about",
-        templateUrl: "/home"
     });
 });
+
+
 
 ///<reference path="../../../../typings/angular.d.ts" />
 ///<reference path="../../app.ts" />
@@ -49,11 +57,11 @@ var App;
     }
     App.LoginDirective = LoginDirective;
     var LoginController = (function () {
-        function LoginController($scope, $http, spinnerService, loginService) {
+        function LoginController($scope, $http, loginService, $location) {
             this.$scope = $scope;
             this.$http = $http;
-            this.spinnerService = spinnerService;
             this.loginService = loginService;
+            this.$location = $location;
             this.logInSelected = false;
             this.signInSelected = true;
             this.displaySpinner = false;
@@ -70,6 +78,7 @@ var App;
             this.$http.post('/api/accounts/register', newUser, { withCredentials: true }).then(function (response) {
                 _this.displaySpinner = false;
                 _this.loginService.setSignedIn();
+                _this.$location.url('/account');
             }, function (err) {
                 _this.displaySpinner = false;
             });
@@ -98,7 +107,7 @@ var App;
             this.logInSelected = true;
             this.signInSelected = false;
         };
-        LoginController.$inject = ['$scope', '$http', 'spinnerService'];
+        LoginController.$inject = ['$scope', '$http', 'loginService', '$location'];
         return LoginController;
     }());
     App.LoginController = LoginController;
@@ -112,8 +121,7 @@ angular.module("App.common")
 var App;
 (function (App) {
     var LoginService = (function () {
-        function LoginService($scope, signedIn, token) {
-            this.$scope = $scope;
+        function LoginService() {
             this.signedIn = false;
             this.token = "";
         }
@@ -129,13 +137,46 @@ var App;
         LoginService.prototype.getToken = function () {
             return this.token;
         };
-        LoginService.inject = ['$scope'];
+        LoginService.inject = [];
         return LoginService;
     }());
     App.LoginService = LoginService;
 })(App || (App = {}));
 angular.module("App.common")
     .service('loginService', App.LoginService);
+
+///<reference path="../../../../typings/angular.d.ts" />
+/// <reference path="loginService.ts" />
+///<reference path="_common.ts" />
+var App;
+(function (App) {
+    function NavbarDirective() {
+        return {
+            restrict: 'E',
+            templateUrl: '/scripts/controllers/common/navbar.html',
+            scope: {},
+            controller: 'navbarController',
+            controllerAs: 'vm',
+            bindToController: true
+        };
+    }
+    App.NavbarDirective = NavbarDirective;
+    var NavbarController = (function () {
+        function NavbarController($scope, loginService) {
+            this.$scope = $scope;
+            this.loginService = loginService;
+        }
+        NavbarController.prototype.isSignedIn = function () {
+            return this.loginService.getSignedIn();
+        };
+        NavbarController.$inject = ['$scope', 'loginService'];
+        return NavbarController;
+    }());
+    App.NavbarController = NavbarController;
+})(App || (App = {}));
+angular.module("App.common")
+    .controller("navbarController", App.NavbarController)
+    .directive("navBar", App.NavbarDirective);
 
 ///<reference path="../../../../typings/angular.d.ts" />
 ///<reference path="../../app.ts" />

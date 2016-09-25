@@ -6,9 +6,9 @@ module App {
         private signedIn: boolean;
         private token: string;
 
-        static inject = ['$scope'];
+        static inject = [];
 
-        constructor(private $scope: ng.IScope, signedIn: boolean, token: string) {
+        constructor() {
             this.signedIn = false;
             this.token = "";
         }

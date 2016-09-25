@@ -15,7 +15,7 @@ module App {
 
     export class LoginController {
 
-        static $inject = ['$scope', '$http', 'spinnerService'];
+        static $inject = ['$scope', '$http', 'loginService', '$location'];
 
         //Presentation logic.
         public signInSelected: boolean;
@@ -29,9 +29,9 @@ module App {
 
         public constructor(
         private $scope: ng.IScope, 
-        private $http: ng.IHttpService, 
-        private spinnerService: any,
-        private loginService: LoginService){
+        private $http: ng.IHttpService,
+        private loginService: LoginService,
+        private $location: ng.ILocationService){
             this.logInSelected = false;
             this.signInSelected = true;
             this.displaySpinner = false;
@@ -48,6 +48,7 @@ module App {
             this.$http.post('/api/accounts/register', newUser, {withCredentials: true}).then(response => {
                 this.displaySpinner = false;
                 this.loginService.setSignedIn();
+                this.$location.url('/account');
             }, err => {
                 this.displaySpinner = false;
             });

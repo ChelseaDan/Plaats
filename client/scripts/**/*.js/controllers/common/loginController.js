@@ -15,11 +15,11 @@ var App;
     }
     App.LoginDirective = LoginDirective;
     var LoginController = (function () {
-        function LoginController($scope, $http, spinnerService, loginService) {
+        function LoginController($scope, $http, loginService, $location) {
             this.$scope = $scope;
             this.$http = $http;
-            this.spinnerService = spinnerService;
             this.loginService = loginService;
+            this.$location = $location;
             this.logInSelected = false;
             this.signInSelected = true;
             this.displaySpinner = false;
@@ -36,6 +36,7 @@ var App;
             this.$http.post('/api/accounts/register', newUser, { withCredentials: true }).then(function (response) {
                 _this.displaySpinner = false;
                 _this.loginService.setSignedIn();
+                _this.$location.url('/account');
             }, function (err) {
                 _this.displaySpinner = false;
             });
@@ -64,7 +65,7 @@ var App;
             this.logInSelected = true;
             this.signInSelected = false;
         };
-        LoginController.$inject = ['$scope', '$http', 'spinnerService'];
+        LoginController.$inject = ['$scope', '$http', 'loginService', '$location'];
         return LoginController;
     }());
     App.LoginController = LoginController;

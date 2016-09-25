@@ -3,8 +3,7 @@
 var App;
 (function (App) {
     var LoginService = (function () {
-        function LoginService($scope, signedIn, token) {
-            this.$scope = $scope;
+        function LoginService() {
             this.signedIn = false;
             this.token = "";
         }
@@ -20,7 +19,7 @@ var App;
         LoginService.prototype.getToken = function () {
             return this.token;
         };
-        LoginService.inject = ['$scope'];
+        LoginService.inject = [];
         return LoginService;
     }());
     App.LoginService = LoginService;
