@@ -1,9 +1,12 @@
 ///<reference path="../../typings/angular.d.ts" />
+/// <reference path="../../node_modules/underscore/underscore.d.ts" />
+var underscore = angular.module('underscore', []);
 var app = angular.module('App', [
     'ui.router',
     'App.common',
     'App.home',
-    'angularSpinners'
+    'angularSpinners',
+    'underscore'
 ]);
 app.config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/home');
@@ -34,7 +37,40 @@ app.config(function ($stateProvider, $urlRouterProvider) {
     });
 });
 
-
+///<reference path="../../../../typings/angular.d.ts" />
+///<reference path="../../app.ts" />
+///<reference path="../common/loginService.ts" />
+var App;
+(function (App) {
+    var AccountController = (function () {
+        function AccountController($scope, loginService) {
+            this.$scope = $scope;
+            this.loginService = loginService;
+        }
+        AccountController.prototype.getMessages = function () {
+            this.viewMessages = true;
+            this.messages = [
+                { id: 1, from: "sender1", title: "Hello world", content: "This is a message" },
+                { id: 2, from: "sender2", title: "Hello world2", content: "This is the second message" },
+                { id: 3, from: "sender3", title: "Hello world3", content: "This is the third message" },
+            ];
+            return this.messages;
+        };
+        AccountController.prototype.getMessageInfo = function (messageId) {
+            this.viewEmailInfo = true;
+            var filtered = _.filter(this.messages, function (message) {
+                return message.id == messageId;
+            });
+            this.selectedMessage = filtered[0];
+            console.log(this.selectedMessage);
+        };
+        AccountController.$inject = ['$scope', 'loginService'];
+        return AccountController;
+    }());
+    App.AccountController = AccountController;
+})(App || (App = {}));
+angular.module("App")
+    .controller("accountController", App.AccountController);
 
 ///<reference path="../../../../typings/angular.d.ts" />
 ///<reference path="../../app.ts" />
@@ -75,12 +111,13 @@ var App;
                 emailAddress: this.emailAddress,
                 password: this.password
             };
-            this.$http.post('/api/accounts/register', newUser, { withCredentials: true }).then(function (response) {
-                _this.displaySpinner = false;
-                _this.loginService.setSignedIn();
+            this.loginService.registerUser(newUser).then(function (reponse) {
                 _this.$location.url('/account');
             }, function (err) {
-                _this.displaySpinner = false;
+                console.log("error in registering so loading /login");
+                _this.$location.url('/login');
+            }).finally(function () {
+                this.displaySpinner = false;
             });
         };
         LoginController.prototype.submitLogInDetails = function () {
@@ -90,10 +127,10 @@ var App;
                 emailAddress: this.emailAddress,
                 password: this.password
             };
-            this.$http.post('/api/accounts/login', existingUser, { withCredentials: true }).then(function (response) {
-                _this.displaySpinner = false;
-                _this.loginService.setSignedIn();
-            }, function (err) {
+            this.loginService.existingUser(existingUser).then(function (response) {
+                _this.$location.url('/account');
+            }).finally(function () {
+                this.displaySpinner = false;
             });
         };
         LoginController.prototype.signedIn = function () {
@@ -121,10 +158,29 @@ angular.module("App.common")
 var App;
 (function (App) {
     var LoginService = (function () {
-        function LoginService() {
+        function LoginService($http) {
+            this.$http = $http;
             this.signedIn = false;
             this.token = "";
         }
+        LoginService.prototype.registerUser = function (newUser) {
+            var _this = this;
+            return this.$http.post('/api/accounts/register', newUser, { withCredentials: true }).then(function (response) {
+                console.log(response);
+                _this.setSignedIn();
+            }, function (err) {
+                console.log("registerUser error occurred.");
+            });
+        };
+        LoginService.prototype.existingUser = function (existingUser) {
+            var _this = this;
+            return this.$http.post('/api/accounts/login', existingUser, { withCredentials: true }).then(function (response) {
+                console.log(response);
+                _this.setSignedIn();
+            }, function (err) {
+                console.log("existingUser error occurred.");
+            });
+        };
         LoginService.prototype.setSignedIn = function () {
             this.signedIn = true;
         };
@@ -137,7 +193,10 @@ var App;
         LoginService.prototype.getToken = function () {
             return this.token;
         };
-        LoginService.inject = [];
+        LoginService.prototype.getUser = function () {
+            return this.user;
+        };
+        LoginService.inject = ['$http'];
         return LoginService;
     }());
     App.LoginService = LoginService;
@@ -177,6 +236,16 @@ var App;
 angular.module("App.common")
     .controller("navbarController", App.NavbarController)
     .directive("navBar", App.NavbarDirective);
+
+var App;
+(function (App) {
+    var User = (function () {
+        function User() {
+        }
+        return User;
+    }());
+    App.User = User;
+})(App || (App = {}));
 
 ///<reference path="../../../../typings/angular.d.ts" />
 ///<reference path="../../app.ts" />

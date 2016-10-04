@@ -45,14 +45,14 @@ module App {
                 emailAddress: this.emailAddress,
                 password: this.password
             }
-            this.$http.post('/api/accounts/register', newUser, {withCredentials: true}).then(response => {
-                this.displaySpinner = false;
-                this.loginService.setSignedIn();
+            this.loginService.registerUser(newUser).then(reponse => {
                 this.$location.url('/account');
             }, err => {
+                console.log("error in registering so loading /login");
+                this.$location.url('/login');
+            }).finally(function(){
                 this.displaySpinner = false;
             });
-
         }
 
         public submitLogInDetails() {
@@ -61,11 +61,10 @@ module App {
                 emailAddress: this.emailAddress,
                 password: this.password
             }
-            this.$http.post('/api/accounts/login', existingUser, {withCredentials: true}).then(response => {
+            this.loginService.existingUser(existingUser).then(response => {
+                this.$location.url('/account');
+            }).finally(function(){
                 this.displaySpinner = false;
-                this.loginService.setSignedIn();
-            }, err => {
-
             });
         }
 

@@ -1,3 +1,26 @@
-<h1>
-HELLO WORLD!!!
-</h1>
+<div class="row">
+    <div class="col-md-4">
+        <img class="img-circle" src="/images/defaultUser.jpg" style="height: 75px; width: 75px">
+        <ul class="list-group">
+            <li class="list-group-item">Account</li>
+            <li class="list-group-item" ng-click="vm.getMessages()">Messages<span class="tag tag-default tag-pill pull-right">14</span></li>
+            <li class="list-group-item">Followers</li>
+            <li class="list-group-item">Watchlist</li>
+        </ul>
+    </div>
+    <div class="col-md-8">
+        <div ng-if="vm.viewMessages">
+            <ul class="list-group">
+                <li ng-click="vm.getMessageInfo(message.id)" ng-repeat="message in vm.messages" class="list-group-item">{{message.from}} - {{message.title}}</li>
+            </ul>
+            <div class="mail_jumbotron" ng-if="vm.viewEmailInfo">
+                <h3 class="left_header">From: {{vm.selectedMessage.from}}</h3>
+                <hr>
+                <p class="mail_content">Content: {{vm.selectedMessage.content}}</p>
+            </div>
+        </div>
+        <div ng-if="vm.viewAccountInfo">
+            
+        </div>
+    </div>
+</div>

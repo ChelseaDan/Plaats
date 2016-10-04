@@ -1,7 +1,7 @@
 <div class="form" ng-show="!vm.signedIn()">
       <ul class="tab-group">
-        <li class="tab"><a ng-click="vm.signIn()">Sign up</a></li>
-        <li class="tab active"><a ng-click="vm.logIn()">Log in</a></li>
+        <li ng-class="{active: vm.signInSelected}"><a ng-click="vm.signIn()">Sign up</a></li>
+        <li ng-class="{active: vm.logInSelected}"><a ng-click="vm.logIn()">Log in</a></li>
       </ul>
         <div ng-show="vm.signInSelected">
           <div class="mask-loading" ng-show="vm.displaySpinner"></div>

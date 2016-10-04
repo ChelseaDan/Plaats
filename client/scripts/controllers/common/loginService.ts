@@ -5,12 +5,31 @@ module App {
 
         private signedIn: boolean;
         private token: string;
+        private user: User;
 
-        static inject = [];
+        static inject = ['$http'];
 
-        constructor() {
+        constructor(private $http: ng.IHttpService) {
             this.signedIn = false;
             this.token = "";
+        }
+
+        public registerUser(newUser: any) {
+            return this.$http.post('/api/accounts/register', newUser, {withCredentials: true}).then(response => {
+                console.log(response);
+                this.setSignedIn();
+            }, err => {
+                console.log("registerUser error occurred.");
+            });
+        }
+
+        public existingUser(existingUser: any) {
+            return this.$http.post('/api/accounts/login', existingUser, {withCredentials: true}).then(response => {
+                console.log(response);
+                this.setSignedIn();
+            }, err => {
+                console.log("existingUser error occurred.");
+            });
         }
 
         public setSignedIn() {
@@ -27,6 +46,10 @@ module App {
 
         public getToken() {
             return this.token;
+        }
+
+        public getUser() {
+            return this.user;
         }
     }
 }

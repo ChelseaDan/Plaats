@@ -33,12 +33,13 @@ var App;
                 emailAddress: this.emailAddress,
                 password: this.password
             };
-            this.$http.post('/api/accounts/register', newUser, { withCredentials: true }).then(function (response) {
-                _this.displaySpinner = false;
-                _this.loginService.setSignedIn();
+            this.loginService.registerUser(newUser).then(function (reponse) {
                 _this.$location.url('/account');
             }, function (err) {
-                _this.displaySpinner = false;
+                console.log("error in registering so loading /login");
+                _this.$location.url('/login');
+            }).finally(function () {
+                this.displaySpinner = false;
             });
         };
         LoginController.prototype.submitLogInDetails = function () {
@@ -48,10 +49,10 @@ var App;
                 emailAddress: this.emailAddress,
                 password: this.password
             };
-            this.$http.post('/api/accounts/login', existingUser, { withCredentials: true }).then(function (response) {
-                _this.displaySpinner = false;
-                _this.loginService.setSignedIn();
-            }, function (err) {
+            this.loginService.existingUser(existingUser).then(function (response) {
+                _this.$location.url('/account');
+            }).finally(function () {
+                this.displaySpinner = false;
             });
         };
         LoginController.prototype.signedIn = function () {

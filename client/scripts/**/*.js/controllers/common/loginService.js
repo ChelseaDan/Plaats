@@ -3,10 +3,29 @@
 var App;
 (function (App) {
     var LoginService = (function () {
-        function LoginService() {
+        function LoginService($http) {
+            this.$http = $http;
             this.signedIn = false;
             this.token = "";
         }
+        LoginService.prototype.registerUser = function (newUser) {
+            var _this = this;
+            return this.$http.post('/api/accounts/register', newUser, { withCredentials: true }).then(function (response) {
+                console.log(response);
+                _this.setSignedIn();
+            }, function (err) {
+                console.log("registerUser error occurred.");
+            });
+        };
+        LoginService.prototype.existingUser = function (existingUser) {
+            var _this = this;
+            return this.$http.post('/api/accounts/login', existingUser, { withCredentials: true }).then(function (response) {
+                console.log(response);
+                _this.setSignedIn();
+            }, function (err) {
+                console.log("existingUser error occurred.");
+            });
+        };
         LoginService.prototype.setSignedIn = function () {
             this.signedIn = true;
         };
@@ -19,7 +38,10 @@ var App;
         LoginService.prototype.getToken = function () {
             return this.token;
         };
-        LoginService.inject = [];
+        LoginService.prototype.getUser = function () {
+            return this.user;
+        };
+        LoginService.inject = ['$http'];
         return LoginService;
     }());
     App.LoginService = LoginService;

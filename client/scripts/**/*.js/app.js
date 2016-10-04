@@ -1,9 +1,12 @@
 ///<reference path="../../typings/angular.d.ts" />
+/// <reference path="../../node_modules/underscore/underscore.d.ts" />
+var underscore = angular.module('underscore', []);
 var app = angular.module('App', [
     'ui.router',
     'App.common',
     'App.home',
-    'angularSpinners'
+    'angularSpinners',
+    'underscore'
 ]);
 app.config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/home');

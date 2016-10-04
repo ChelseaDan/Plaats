@@ -35,6 +35,7 @@ app.delete('/api/meetups/:name', meetupsController.remove);
 //Static file serving.
 
 app.use('/scripts', express.static(__dirname + '/client/scripts'));
+app.use('/images', express.static(__dirname + '/images'));
 app.use('/css', express.static(__dirname + '/client/css'));
 app.use('/dist', express.static(__dirname + '/dist/scripts'));
 app.use('/libs', express.static(__dirname + '/libs'));
