@@ -39,7 +39,7 @@ var App;
             return this.token;
         };
         LoginService.prototype.getUser = function () {
-            return this.user;
+            return { userName: "Daniel Graaf", emailAddress: "dan.graaf@yahoo.co.uk" };
         };
         LoginService.inject = ['$http'];
         return LoginService;

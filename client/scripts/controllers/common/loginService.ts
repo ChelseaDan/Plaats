@@ -49,7 +49,7 @@ module App {
         }
 
         public getUser() {
-            return this.user;
+            return {userName: "Daniel Graaf", emailAddress: "dan.graaf@yahoo.co.uk"};
         }
     }
 }

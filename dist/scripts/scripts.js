@@ -46,8 +46,10 @@ var App;
         function AccountController($scope, loginService) {
             this.$scope = $scope;
             this.loginService = loginService;
+            this.user = this.loginService.getUser();
         }
         AccountController.prototype.getMessages = function () {
+            this.resetAllViews();
             this.viewMessages = true;
             this.messages = [
                 { id: 1, from: "sender1", title: "Hello world", content: "This is a message" },
@@ -63,6 +65,16 @@ var App;
             });
             this.selectedMessage = filtered[0];
             console.log(this.selectedMessage);
+        };
+        AccountController.prototype.getAccountInfo = function () {
+            this.resetAllViews();
+            this.viewAccountInfo = true;
+            this.user = this.loginService.getUser();
+        };
+        AccountController.prototype.resetAllViews = function () {
+            this.viewAccountInfo = false;
+            this.viewEmailInfo = false;
+            this.viewMessages = false;
         };
         AccountController.$inject = ['$scope', 'loginService'];
         return AccountController;
@@ -194,7 +206,7 @@ var App;
             return this.token;
         };
         LoginService.prototype.getUser = function () {
-            return this.user;
+            return { userName: "Daniel Graaf", emailAddress: "dan.graaf@yahoo.co.uk" };
         };
         LoginService.inject = ['$http'];
         return LoginService;
