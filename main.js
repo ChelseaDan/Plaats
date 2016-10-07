@@ -69,6 +69,10 @@ app.use('/node_modules', express.static(__dirname + '/node_modules'));
 		res.sendFile(__dirname + '/client/scripts/controllers/account/account.html');
 	});
 
+	app.get('/search', function(req, res) {
+		res.sendFile(__dirname + '/client/scripts/controllers/search/search.html');
+	})
+
 	// process the login form
 	app.post('/login', passport.authenticate('local-login', {
 		successRedirect : '/profile', // redirect to the secure profile section

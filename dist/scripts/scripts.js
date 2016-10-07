@@ -1,13 +1,32 @@
 ///<reference path="../../typings/angular.d.ts" />
-/// <reference path="../../node_modules/underscore/underscore.d.ts" />
+///<reference path="../../node_modules/underscore/underscore.d.ts" />
+///<reference path="../../typings/index.d.ts" />
+"use strict";
 var underscore = angular.module('underscore', []);
+var dropzone1 = angular.module('dropzone', []);
+require("dropzone");
 var app = angular.module('App', [
     'ui.router',
     'App.common',
     'App.home',
     'angularSpinners',
-    'underscore'
+    'underscore',
+    'ui.bootstrap',
+    'dropzone'
 ]);
+app.directive("dropzone", function () {
+    return function (scope, element, attrs) {
+        var config, dropzone;
+        config = scope["vm"]["$scope"]["dropzoneConfig"];
+        //console.log(Dropzone);
+        // create a Dropzone for the element with the given options
+        dropzone = new Dropzone(element[0], config.options);
+        // bind the given event handlers
+        angular.forEach(config.eventHandlers, function (handler, event) {
+            dropzone.on(event, handler);
+        });
+    };
+});
 app.config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/home');
     $stateProvider
@@ -17,10 +36,10 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         controller: "homeController",
         controllerAs: "vm"
     })
-        .state('properties', {
-        url: '/properties',
-        templateUrl: '/home',
-        controller: "homeController",
+        .state('search', {
+        url: '/search',
+        templateUrl: '/search',
+        controller: "searchController",
         controllerAs: "vm"
     })
         .state('account', {
@@ -51,20 +70,17 @@ var App;
         AccountController.prototype.getMessages = function () {
             this.resetAllViews();
             this.viewMessages = true;
-            this.messages = [
-                { id: 1, from: "sender1", title: "Hello world", content: "This is a message" },
-                { id: 2, from: "sender2", title: "Hello world2", content: "This is the second message" },
-                { id: 3, from: "sender3", title: "Hello world3", content: "This is the third message" },
-            ];
+            this.messages = {
+                Person1: [{ sent: true, content: "test123" }, { sent: false, content: "received123" }],
+                Person2: [{ sent: false, content: "Would you like some help with interiors?" }, { sent: true, content: "Yes please!" }]
+            };
+            this.allSenders = _.keys(this.messages);
             return this.messages;
         };
-        AccountController.prototype.getMessageInfo = function (messageId) {
+        AccountController.prototype.getMessageInfo = function (senderName) {
             this.viewEmailInfo = true;
-            var filtered = _.filter(this.messages, function (message) {
-                return message.id == messageId;
-            });
-            this.selectedMessage = filtered[0];
-            console.log(this.selectedMessage);
+            this.selectedSender = senderName;
+            this.selectedConversation = this.messages[senderName];
         };
         AccountController.prototype.getAccountInfo = function () {
             this.resetAllViews();
@@ -75,6 +91,12 @@ var App;
             this.viewAccountInfo = false;
             this.viewEmailInfo = false;
             this.viewMessages = false;
+        };
+        AccountController.prototype.sendMessage = function () {
+            if (this.newMessage && this.newMessage.length > 0) {
+                this.selectedConversation.push({ sent: true, content: this.newMessage });
+                this.newMessage = "";
+            }
         };
         AccountController.$inject = ['$scope', 'loginService'];
         return AccountController;
@@ -292,3 +314,30 @@ var App;
 angular.module("App.home")
     .controller("homeController", App.home.HomeController)
     .directive("home", App.home.HomeDirective);
+
+///<reference path="../../../../typings/angular.d.ts" />
+///<reference path="../../app.ts" />
+var App;
+(function (App) {
+    var SearchController = (function () {
+        function SearchController($scope) {
+            this.$scope = $scope;
+            $scope.dropzoneConfig = {
+                'options': {
+                    'url': 'upload.php'
+                },
+                'eventHandlers': {
+                    'sending': function (file, xhr, formData) {
+                    },
+                    'success': function (file, response) {
+                    }
+                }
+            };
+        }
+        SearchController.$inject = ['$scope'];
+        return SearchController;
+    }());
+    App.SearchController = SearchController;
+})(App || (App = {}));
+angular.module("App")
+    .controller("searchController", App.SearchController);

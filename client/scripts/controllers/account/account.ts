@@ -11,8 +11,11 @@ module App {
         private viewMessages: boolean;
         private viewAccountInfo: boolean;
         private viewEmailInfo: boolean;
+        private newMessage: string;
         private messages;
-        private selectedMessage;
+        private selectedConversation : any[];
+        private allSenders: string[];
+        private selectedSender: string;
         private user;
 
         public constructor(
@@ -24,21 +27,18 @@ module App {
         public getMessages() { 
             this.resetAllViews();
             this.viewMessages = true;
-            this.messages = [
-                {id: 1, time: from: "sender1", title: "Hello world", content: "This is a message"},
-                {id: 2, from: "sender2", title: "Hello world2", content: "This is the second message"},
-                {id: 3, from: "sender3", title: "Hello world3", content: "This is the third message"},
-            ];
+            this.messages = {
+                Person1: [{sent: true, content: "test123"}, {sent: false, content: "received123"}],
+                Person2: [{sent: false, content: "Would you like some help with interiors?"}, {sent: true, content: "Yes please!"}]
+            };
+            this.allSenders = _.keys(this.messages);
             return this.messages;
         }
         
-        public getMessageInfo(messageId: number) {
+        public getMessageInfo(senderName: string) {
             this.viewEmailInfo = true;
-            var filtered = _.filter(this.messages, function(message : any) {
-                return message.id == messageId; 
-            });
-            this.selectedMessage = filtered[0];
-            console.log(this.selectedMessage);
+            this.selectedSender = senderName;
+            this.selectedConversation = this.messages[senderName];
         }
 
         public getAccountInfo() {
@@ -51,6 +51,13 @@ module App {
             this.viewAccountInfo = false;
             this.viewEmailInfo = false;
             this.viewMessages = false;
+        }
+
+        public sendMessage() {
+            if (this.newMessage && this.newMessage.length > 0) {
+                this.selectedConversation.push({sent: true, content: this.newMessage});
+                this.newMessage = "";
+            }
         }
 
     }

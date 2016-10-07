@@ -12,20 +12,17 @@ var App;
         AccountController.prototype.getMessages = function () {
             this.resetAllViews();
             this.viewMessages = true;
-            this.messages = [
-                { id: 1, from: "sender1", title: "Hello world", content: "This is a message" },
-                { id: 2, from: "sender2", title: "Hello world2", content: "This is the second message" },
-                { id: 3, from: "sender3", title: "Hello world3", content: "This is the third message" },
-            ];
+            this.messages = {
+                Person1: [{ sent: true, content: "test123" }, { sent: false, content: "received123" }],
+                Person2: [{ sent: false, content: "Would you like some help with interiors?" }, { sent: true, content: "Yes please!" }]
+            };
+            this.allSenders = _.keys(this.messages);
             return this.messages;
         };
-        AccountController.prototype.getMessageInfo = function (messageId) {
+        AccountController.prototype.getMessageInfo = function (senderName) {
             this.viewEmailInfo = true;
-            var filtered = _.filter(this.messages, function (message) {
-                return message.id == messageId;
-            });
-            this.selectedMessage = filtered[0];
-            console.log(this.selectedMessage);
+            this.selectedSender = senderName;
+            this.selectedConversation = this.messages[senderName];
         };
         AccountController.prototype.getAccountInfo = function () {
             this.resetAllViews();
@@ -36,6 +33,12 @@ var App;
             this.viewAccountInfo = false;
             this.viewEmailInfo = false;
             this.viewMessages = false;
+        };
+        AccountController.prototype.sendMessage = function () {
+            if (this.newMessage && this.newMessage.length > 0) {
+                this.selectedConversation.push({ sent: true, content: this.newMessage });
+                this.newMessage = "";
+            }
         };
         AccountController.$inject = ['$scope', 'loginService'];
         return AccountController;
