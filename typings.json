@@ -1,9 +1,0 @@
-{
-  "globalDependencies": {
-    "dropzone": "registry:dt/dropzone#4.3.0+20160923131451",
-    "node": "registry:dt/node#6.0.0+20161006230116"
-  },
-  "dependencies": {
-    "debug": "registry:npm/debug#2.0.0+20160723033700"
-  }
-}
