@@ -1,12 +1,7 @@
-///<reference path="../../typings/angular.d.ts" />
-///<reference path="../../node_modules/underscore/underscore.d.ts" />
-///<reference path="../../typings/index.d.ts" />
-
 var underscore = angular.module('underscore', []);
-var dropzone1 = angular.module('dropzone', []);
-import "dropzone";
+var dropzone = angular.module('dropzone', []);
 
-var app = angular.module('App', [
+angular.module('App', [
     'ui.router',
     'App.common',
     'App.home',
@@ -14,23 +9,21 @@ var app = angular.module('App', [
     'underscore',
     'ui.bootstrap',
     'dropzone'
-]);
+]).directive('dropzone', function () {
+  return function (scope, element, attrs) {
+    var config, dropzone;
 
-app.directive("dropzone", function(){
-    return function (scope, element, attrs) {
-        var config, dropzone;
-        config = scope["vm"]["$scope"]["dropzoneConfig"];
-        //console.log(Dropzone);
-        // create a Dropzone for the element with the given options
-        dropzone = new Dropzone(element[0], config.options);
-        // bind the given event handlers
-        angular.forEach(config.eventHandlers, function (handler, event) {
-          dropzone.on(event, handler);
-        });
-    };
-});
+    config = scope.dropzoneConfig;
 
-app.config(function($stateProvider, $urlRouterProvider) {
+    // create a Dropzone for the element with the given options
+    dropzone = new Dropzone(element[0], config.options);
+
+    // bind the given event handlers
+    angular.forEach(config.eventHandlers, function (handler, event) {
+      dropzone.on(event, handler);
+    });
+  };
+}).config(function($stateProvider, $urlRouterProvider) {
     
     $urlRouterProvider.otherwise('/home');
     
@@ -58,6 +51,5 @@ app.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: "/login",
             controller: "loginController",
             controllerAs: "vm"
-        });
-        
+        }); 
 });

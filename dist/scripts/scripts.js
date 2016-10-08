@@ -1,3 +1,41 @@
+angular.module('App', [
+    'ui.router',
+    'App.common',
+    'App.home',
+    'angularSpinners',
+    'underscore',
+    'ui.bootstrap',
+    'dropzone'
+]).config(function($stateProvider, $urlRouterProvider) {
+    
+    $urlRouterProvider.otherwise('/home');
+    
+    $stateProvider
+        .state('home', {
+            url: '/home',
+            templateUrl: '/home',
+            controller: "homeController",
+            controllerAs: "vm"
+        })
+        .state('search', {
+            url: '/search',
+            templateUrl: '/search',
+            controller: "searchController",
+            controllerAs: "vm"
+        })
+        .state('account', {
+            url: '/account',
+            templateUrl: '/account',
+            controller: "accountController",
+            controllerAs: "vm"
+        })
+        .state("login", {
+            url: "/login",
+            templateUrl: "/login",
+            controller: "loginController",
+            controllerAs: "vm"
+        }); 
+});
 ///<reference path="../../typings/angular.d.ts" />
 ///<reference path="../../node_modules/underscore/underscore.d.ts" />
 ///<reference path="../../typings/index.d.ts" />
@@ -56,6 +94,210 @@ app.config(function ($stateProvider, $urlRouterProvider) {
     });
 });
 
+function AccountController($scope, loginService) {
+    var self = this;
+    self.$scope = $scope;
+    self.loginService = loginService;
+    self.user = loginService.getUser();
+
+    self.getMessages = function () {
+        self.resetAllViews();
+        self.viewMessages = true;
+        self.messages = {
+            Person1: [{ sent: true, content: "test123" }, { sent: false, content: "received123" }],
+            Person2: [{ sent: false, content: "Would you like some help with interiors?" }, { sent: true, content: "Yes please!" }]
+        };
+        self.allSenders = _.keys(self.messages);
+        return self.messages;
+    };
+    self.getMessageInfo = function (senderName) {
+        self.viewEmailInfo = true;
+        self.selectedSender = senderName;
+        self.selectedConversation = self.messages[senderName];
+    };
+    self.getAccountInfo = function () {
+        self.resetAllViews();
+        self.viewAccountInfo = true;
+        self.user = self.loginService.getUser();
+    };
+    self.resetAllViews = function () {
+        self.viewAccountInfo = false;
+        self.viewEmailInfo = false;
+        self.viewMessages = false;
+    };
+    self.sendMessage = function () {
+        if (self.newMessage && self.newMessage.length > 0) {
+            self.selectedConversation.push({ sent: true, content: self.newMessage });
+            self.newMessage = "";
+        }
+    };
+}
+
+angular.module("App")
+    .controller("accountController", ['$scope', 'loginService', AccountController]);
+angular.module("App.common", ['angularSpinners']);
+
+    function LoginDirective() {
+        return {
+            restrict: 'E',
+            templateUrl: '/scripts/controllers/common/login.html',
+            scope : {},
+            controller: 'loginController',
+            controllerAs: 'vm',
+            bindToController: true
+        };
+    }
+
+    function LoginController($scope, $http, loginService, $location) {
+
+        var self = this;
+        //Presentation logic.
+        self.signInSelected = true;
+        self.logInSelected = false;
+        //User details.
+        self.firstName = "";
+        self.lastName = "";
+        self.emailAddress = "";
+        self.password = "";
+        self.displaySpinner = false;
+
+        self.submitNewUserDetails = function() {
+            self.displaySpinner = true;
+            var newUser = {
+                firstName: this.firstName,
+                lastName: this.lastName, 
+                emailAddress: this.emailAddress,
+                password: this.password
+            }
+            loginService.registerUser(newUser).then(function(reponse) {
+                $location.url('/account');
+            }, function(err) {
+                console.log("error in registering so loading /login");
+                $location.url('/login');
+            }).finally(function(){
+                self.displaySpinner = false;
+            });
+        }
+
+        self.submitLogInDetails = function() {
+            self.displaySpinner = true;
+            var existingUser = {
+                emailAddress: self.emailAddress,
+                password: self.password
+            }
+            loginService.existingUser(existingUser).then(function(response) {
+                $location.url('/account');
+            }).finally(function(){
+                self.displaySpinner = false;
+            });
+        }
+
+        self.signedIn = function() {
+            return loginService.getSignedIn();
+        }
+
+        self.signIn = function() {
+            self.signInSelected = true;
+            self.logInSelected = false;
+        }
+
+        self.logIn = function() {
+            self.logInSelected = true;
+            self.signInSelected = false;
+        }
+    }
+}
+angular.module("App.common")
+.controller("loginController", ['$scope', '$http', 'loginService', '$location', LoginController])
+.directive("logIn", LoginDirective);
+function LoginService($http) {
+
+        var signedIn = false;
+
+        return {
+            registerUser: registerUser,
+            existingUser: existingUser,
+            getSignedIn: getSignedIn,
+            getUser: getUser
+        }
+
+        function registerUser(newUser) {
+            return $http.post('/api/accounts/register', newUser, {withCredentials: true}).then(function(response) {
+                console.log(response);
+                setSignedIn();
+            }, function(err) {
+                console.log("registerUser error occurred.");
+            });
+        }
+
+        function existingUser(existingUser) {
+            return $http.post('/api/accounts/login', existingUser, {withCredentials: true}).then(function(response) {
+                console.log(response);
+                setSignedIn();
+            }, function(err) {
+                console.log("existingUser error occurred.");
+            });
+        }
+
+        function setSignedIn() {
+            this.signedIn = true;
+        }
+
+        function getSignedIn() {
+            return this.signedIn;
+        }
+
+        function getUser() {
+            return {userName: "Daniel Graaf", emailAddress: "dan.graaf@yahoo.co.uk"};
+        }
+    }
+}
+angular.module("App.common")
+    .service('loginService', ['$http', LoginService]);
+function NavbarDirective() {
+    return {
+        restrict: 'E',
+        templateUrl: '/scripts/controllers/common/navbar.html',
+        scope : {},
+        controller: 'navbarController',
+        controllerAs: 'vm',
+        bindToController: true
+    };
+}
+
+function NavbarController($scope, loginService) {
+        $self.isSignedIn = function() {
+            return loginService.getSignedIn();
+        }
+    }
+}
+angular.module("App.common")
+.controller("navbarController", ['$scope', 'loginService', NavbarController])
+.directive("navBar", NavbarDirective);
+angular.module("App.home", []);
+function HomeDirective() {
+    return {
+        restrict: 'E',
+        templateUrl: '/scripts/controllers/home/home.html',
+        scope : {},
+        controller: 'homeController',
+        controllerAs: 'vm',
+        bindToController: true
+    };
+}
+
+function HomeController() {
+    console.log("Constructed home controller");
+}
+
+angular.module("App.home")
+.controller("homeController", HomeController)
+.directive("home", HomeDirective);
+function SearchController() {
+
+}
+angular.module("App")
+.controller("searchController", SearchController);
 ///<reference path="../../../../typings/angular.d.ts" />
 ///<reference path="../../app.ts" />
 ///<reference path="../common/loginService.ts" />
