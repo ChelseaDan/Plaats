@@ -2,6 +2,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
+var multer   =  require( 'multer' );
+var upload   =  multer( { dest: 'uploads/' } );
 var mongoose = require('mongoose');
 var passport = require('passport');
 
@@ -11,6 +13,7 @@ mongoose.connect('mongodb://plaatsdb:plaats123@ds019996.mlab.com:19996/heroku_p8
 
 meetupsController = require('./server/controllers/meetupsController');
 accountsController = require('./server/controllers/accountsController');
+uploadController = require('./server/controllers/uploadController');
 require('./server/config/passport')(passport); 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));   
@@ -18,7 +21,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 	// required for passport
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
-
 
 // Controller method routes.
 
@@ -31,6 +33,8 @@ app.post('/api/accounts/login', accountsController.checkUser);
 app.get('/api/meetups', meetupsController.list);
 
 app.delete('/api/meetups/:name', meetupsController.remove);
+
+app.post('/api/upload', upload.single( 'file' ), uploadController.upload);
 
 //Static file serving.
 
