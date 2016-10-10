@@ -2,8 +2,20 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
+var crypto = require('crypto');
 var multer   =  require( 'multer' );
-var upload   =  multer( { dest: 'uploads/' } );
+var mime = require('mime');
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads/')
+  },
+  filename: function (req, file, cb) {
+    crypto.pseudoRandomBytes(16, function (err, raw) {
+      cb(null, raw.toString('hex') + Date.now() + '.' + mime.extension(file.mimetype));
+    });
+  }
+});
+var upload   =  multer( { storage: storage } );
 var mongoose = require('mongoose');
 var passport = require('passport');
 
@@ -45,6 +57,7 @@ app.use('/dist', express.static(__dirname + '/dist/scripts'));
 app.use('/libs', express.static(__dirname + '/libs'));
 app.use('/fonts', express.static(__dirname + '/client/fonts'));
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
+app.use('/TestImages/', express.static(__dirname + '/TestImages/'));
 
 // =====================================
 	// HOME PAGE (with login links) ========
@@ -55,6 +68,10 @@ app.use('/node_modules', express.static(__dirname + '/node_modules'));
 
     app.get('/home', function(req, res){
         res.sendFile(__dirname + '/client/scripts/controllers/common/banner.html');
+    });
+
+	app.get('/gallery', function(req, res){
+        res.sendFile(__dirname + '/client/scripts/controllers/gallery/gallery.html');
     });
 
 	// =====================================
@@ -68,7 +85,6 @@ app.use('/node_modules', express.static(__dirname + '/node_modules'));
 	});
 
 	app.get('/account', function(req, res) {
-
 		// render the page and pass in any flash data if it exists
 		res.sendFile(__dirname + '/client/scripts/controllers/account/account.html');
 	});
@@ -147,5 +163,5 @@ function isLoggedIn(req, res, next) {
 }
 
 app.listen(process.env.PORT || 3000, function() {
-    console.log('I\'m Listening...');
+    console.log('I\'m Listening on port...' + (process.env.PORT || 3000));
 })

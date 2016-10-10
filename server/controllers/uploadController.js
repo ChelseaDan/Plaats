@@ -4,7 +4,7 @@ var sizeOf = require('image-size');
 var Image = require('../models/images');
 var fs = require('fs');
 var path = require('path');
-var resemble = require('resemblejs');
+var resemble = require('node-resemble-js');
 
 module.exports.upload = function (req, res, next) {
     if (!req.file.mimetype.startsWith('image/')) {
@@ -28,9 +28,12 @@ module.exports.upload = function (req, res, next) {
         if (err) {
             return console.error(err);
         }
+
+        var filesToReturn = [];
+
         files.forEach(function (file) {
-            fs.readFile(path.join(__dirname, './../../uploads/' + file), (err, data) => {
-                console.log(data);
+            var diff = resemble(path.join(__dirname, './../../uploads/' + file)).compareTo(path.join(__dirname, './../../uploads/' + req.file.filename)).ignoreColors().onComplete(function(data){
+                console.log(data.misMatchPercentage);
             });
         });
     });

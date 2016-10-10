@@ -31,25 +31,31 @@ angular.module('App', [
         .state('home', {
             url: '/home',
             templateUrl: '/home',
-            controller: "homeController",
-            controllerAs: "vm"
+            controller: 'homeController',
+            controllerAs: 'vm'
         })
         .state('search', {
             url: '/search',
             templateUrl: '/search',
-            controller: "searchController",
-            controllerAs: "vm"
+            controller: 'searchController',
+            controllerAs: 'vm'
         })
         .state('account', {
             url: '/account',
             templateUrl: '/account',
-            controller: "accountController",
-            controllerAs: "vm"
+            controller: 'accountController',
+            controllerAs: 'vm'
         })
-        .state("login", {
-            url: "/login",
-            templateUrl: "/login",
-            controller: "loginController",
-            controllerAs: "vm"
+        .state('gallery', {
+            url: '/gallery',
+            templateUrl: '/gallery',
+            controller: 'galleryController',
+            controllerAs: 'vm'
+        })
+        .state('login', {
+            url: '/login',
+            templateUrl: '/login',
+            controller: 'loginController',
+            controllerAs: 'vm'
         }); 
 });
