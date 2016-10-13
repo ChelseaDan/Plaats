@@ -67,7 +67,7 @@ app.use('/TestImages/', express.static(__dirname + '/TestImages/'));
 	});
 
     app.get('/home', function(req, res){
-        res.sendFile(__dirname + '/client/scripts/controllers/common/banner.html');
+        res.sendFile(__dirname + '/client/scripts/controllers/home/home.html');
     });
 
 	app.get('/gallery', function(req, res){

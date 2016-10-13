@@ -31,11 +31,11 @@ module.exports.upload = function (req, res, next) {
 
         var filesToReturn = [];
 
-        files.forEach(function (file) {
-            var diff = resemble(path.join(__dirname, './../../uploads/' + file)).compareTo(path.join(__dirname, './../../uploads/' + req.file.filename)).ignoreColors().onComplete(function(data){
-                console.log(data.misMatchPercentage);
-            });
-        });
+        // files.forEach(function (file) {
+        //     var diff = resemble(path.join(__dirname, './../../uploads/' + file)).compareTo(path.join(__dirname, './../../uploads/' + req.file.filename)).ignoreColors().onComplete(function(data){
+        //         console.log(data.misMatchPercentage);
+        //     });
+        // });
     });
 
     return res.status(200).send(req.file);

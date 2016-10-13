@@ -1,4 +1,4 @@
-function SearchController($scope, $location) {
+function SearchController($scope, $location, $timeout) {
     $scope.dropzoneConfig = {
         'options': { // passed into the Dropzone constructor
             'url': '/api/upload',
@@ -6,17 +6,16 @@ function SearchController($scope, $location) {
         },
         'eventHandlers': {
             'sending': function (file, xhr, formData) {
-                console.log("sending");
-                $location.url('/gallery');
-                console.log("redirected");
+            },
+            'queuecomplete': function(){
+                
             },
             'success': function (file, response) {
-                console.log("success");
-                console.log(file);
-                console.log(response);
+                $location.url('/gallery');
+                $scope.$apply();
             }
         }
     }
 }
 angular.module("App")
-    .controller("searchController", ['$scope', '$location', SearchController]);
+    .controller("searchController", ['$scope', '$location', '$timeout', SearchController]);

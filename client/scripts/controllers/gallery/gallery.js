@@ -9,7 +9,9 @@ function GalleryDirective() {
     };
 }
 function GalleryController($scope) {
-    $scope.images = ["interior1", "interior2", "interior3", "interior4"];
+    var self = this;
+    self.images = ["interior1.jpg", "interior2.jpg", "interior3.jpg", "interior4.jpg"];
+    
 }
 angular.module("App")
     .controller("galleryController", ['$scope', GalleryController])
