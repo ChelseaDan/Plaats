@@ -10,10 +10,7 @@ module.exports.create = function(req, res) {
     newUser.local.email = req.body.emailAddress;    
     newUser.local.password = bcrypt.hashSync(req.body.password);
     newUser.save(function(err, result){
-        var millisecondsToWait = 5000;
-        setTimeout(function() {
         res.json(result);
-        }, millisecondsToWait);
     });
 };
 

@@ -2,8 +2,10 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
+var http = require('http').Server(app);
 var crypto = require('crypto');
-var multer   =  require( 'multer' );
+var multer = require('multer');
+var io = require('socket.io')(http);
 var mime = require('mime');
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
