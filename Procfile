@@ -1,1 +1,1 @@
-web: gulp && node main
+web:node main
