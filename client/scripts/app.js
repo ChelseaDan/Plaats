@@ -24,7 +24,7 @@ angular.module('App', [
     });
   };
 }).config(function($stateProvider, $urlRouterProvider) {
-    
+
     $urlRouterProvider.otherwise('/home');
     
     $stateProvider

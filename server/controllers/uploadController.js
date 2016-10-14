@@ -15,16 +15,17 @@ module.exports.upload = function (req, res, next) {
 
     var dimensions = sizeOf(req.file.path);
 
-    if ((dimensions.width < 640) || (dimensions.height < 480)) {
+    /*if ((dimensions.width < 640) || (dimensions.height < 480)) {
         return res.status(422).json({
             error: 'The image must be at least 640 x 480px'
         });
-    }
+    }*/
 
     var image = new Image({ email: "ABC123", imagePath: req.file.path });
     image.save();
 
-    fs.readdir(path.join(__dirname, './../../uploads'), function (err, files) {
+    return res.status(200).send(req.file);
+    /*fs.readdir(path.join(__dirname, './../../uploads'), function (err, files) {
         if (err) {
             return console.error(err);
         }
@@ -38,5 +39,5 @@ module.exports.upload = function (req, res, next) {
         // });
     });
 
-    return res.status(200).send(req.file);
+    return res.status(200).send(req.file);*/
 }

@@ -21,7 +21,10 @@ var upload   =  multer( { storage: storage } );
 var mongoose = require('mongoose');
 var passport = require('passport');
 
-//mongoose.connect('mongodb://localhost:27017/mean-demo');
+io.on('connection', function(socket) {
+	console.log('a user connected');
+})
+
 mongoose.connect('mongodb://plaatsdb:plaats123@ds019996.mlab.com:19996/heroku_p81txdqj');
 
 
