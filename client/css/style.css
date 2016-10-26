@@ -201,11 +201,11 @@ textarea {
   bottom:0;
   left:0;
   overflow-x:auto;
-  background-color: lightgray;
+  background-color: white;
 }
 
 .main-div {
-  background-color: lightgrey;
+  background-color: white;
 }
 
 .mask-loading {
@@ -502,6 +502,11 @@ textarea {
     background: none;
 }
 
+.mainviewsidemenu {
+    position: absolute;
+    left: 250px;
+}
+
 @media(min-width:768px) {
     #wrapper {
         padding-left: 250px;
@@ -518,3 +523,4 @@ textarea {
     #wrapper.toggled #sidebar-wrapper {
         width: 0;
     }      
+}
